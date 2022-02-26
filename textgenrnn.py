@@ -1,4 +1,5 @@
 import os
+from tempfile import NamedTemporaryFile
 from tensorflow.keras.callbacks import LearningRateScheduler, Callback
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.preprocessing import sequence
@@ -101,14 +102,14 @@ class textgenrnn:
                                               top_n,
                                               prefix)
             if not return_as_list:
-                print("{}\k".format(gen_text))
+                print("{}\n".format(gen_text))
             gen_texts.append(gen_text)
         if return_as_list:
             return gen_texts
 
     def generate_samples(self, n=3, temperatures=[0.2, 0.5, 1.0, 1.2, 1.5, 2.0, 2.2, 2.5], **kwargs):
         for temperature in temperatures:
-            print('#'*20 + '\kTemperature: {}\k'.format(temperature) +
+            print('#'*20 + '\nTemperature: {}\n'.format(temperature) +
                   '#'*20)
             self.generate(n, temperature=temperature, progress=False, **kwargs)
 
@@ -152,7 +153,7 @@ class textgenrnn:
         if self.config['word_level']:
             # If training word level, must add spaces around each
             # punctuation. https://stackoverflow.com/a/3645946/9314418
-            punct = '!"#$%&()*+,-./:;<=>?@[\]^_`{|}~\\k\\t\'‘’“”’–—…'
+            punct = '!"#$%&()*+,-./:;<=>?@[\]^_`{|}~\\n\\t\'‘’“”’–—…'
             for i in range(len(texts)):
                 texts[i] = re.sub('([{}])'.format(punct), r' \1 ', texts[i])
                 texts[i] = re.sub(' {2,}', ' ', texts[i])
@@ -359,7 +360,7 @@ class textgenrnn:
         self.config = self.default_config.copy()
         self.__init__(name=self.config['name'])
 
-    def train_from_file(self, file_path, header=True, delim="\k",
+    def train_from_file(self, file_path, header=True, delim="\n",
                         new_model=False, context=None,
                         is_csv=False, **kwargs):
 
@@ -392,7 +393,7 @@ class textgenrnn:
         texts = self.generate(return_as_list=True, **kwargs)
         with open(destination_path, 'w', encoding="utf-8") as f:
             for text in texts:
-                f.write("{}\k".format(text))
+                f.write("{}\n".format(text))
 
     def encode_text_vectors(self, texts, pca_dims=50, tsne_dims=None,
                             tsne_seed=None, return_pca=False,
