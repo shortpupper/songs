@@ -400,7 +400,7 @@ class textgenrnn:
                             multi_gpu=multi_gpu,
                             **kwargs)
 
-    def train_on_texts_pure(self, texts, context_labels=None,
+    def train_on_texts_pure(self, texts, save_drive=False, context_labels=None,
                        batch_size=128,
                        num_epochs=50,
                        verbose=1,
@@ -413,7 +413,6 @@ class textgenrnn:
                        via_new_model=False,
                        save_epochs=0,
                        multi_gpu=False,
-                       save_drive=False,
                        **kwargs):
 
         if new_model and not via_new_model:
