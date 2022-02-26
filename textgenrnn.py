@@ -344,11 +344,12 @@ class textgenrnn:
     def save(self, weights_path="textgenrnn_weights_saved.hdf5", save_drive=False,):
         self.model.save_weights(weights_path)
         #edit
-        with open("", "rb", encoding="utf-8", errors="ingore") as h:
-            h = h.read(f"{os.getcwd()}/{weights_path}")
-        with open(f"{os.getcwd()}/drive/MyDrive/text/{weights_path[:-5]}_{count2}_{count2-1}.hdf5", "wb", encoding="utf-8", errors="ingore") as e:
-            e.write(h)
-        count2 += 1
+        if save_drive:
+            with open("", "rb", encoding="utf-8", errors="ingore") as h:
+                h = h.read(f"{os.getcwd()}/{weights_path}")
+            with open(f"{os.getcwd()}/drive/MyDrive/text/{weights_path[:-5]}_{count2}_{count2-1}.hdf5", "wb", encoding="utf-8", errors="ingore") as e:
+                e.write(h)
+            count2 += 1
 
     def load(self, weights_path):
         self.model = textgenrnn_model(self.num_classes,
