@@ -417,7 +417,7 @@ class textgenrnn:
                        **kwargs):
 
         if new_model and not via_new_model:
-            self.train_new_model(texts,
+            self.train_new_model_pure(texts,
                                  context_labels=context_labels,
                                  num_epochs=num_epochs,
                                  gen_epochs=gen_epochs,
@@ -488,7 +488,8 @@ class textgenrnn:
 
         steps_per_epoch = max(int(np.floor(num_tokens / batch_size)), 1)
 
-        gen = generate_sequences_from_texts(
+        
+         = generate_sequences_from_texts(
             texts, indices_list, self, context_labels, batch_size)
 
         base_lr = 4e-3
@@ -722,3 +723,15 @@ class textgenrnn:
         return return_objects
 
     def similarity(self, text, texts, use_pca=True):
+        text_encoded = self.encode_text_vectors(text, pca_dims=None)
+        if use_pca:
+            texts_encoded, pca = self.encode_text_vectors(texts,
+                                                          return_pca=True)
+            text_encoded = pca.transform(text_encoded)
+        else:
+            texts_encoded = self.encode_text_vectors(texts, pca_dims=None)
+
+        cos_similairity = cosine_similarity(text_encoded, texts_encoded)[0]
+        text_sim_pairs = list(zip(texts, cos_similairity))
+        text_sim_pairs = sorted(text_sim_pairs, key=lambda x: -x[1])
+        return text_sim_pairs
