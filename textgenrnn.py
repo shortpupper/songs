@@ -489,7 +489,7 @@ class textgenrnn:
         steps_per_epoch = max(int(np.floor(num_tokens / batch_size)), 1)
 
         
-         = generate_sequences_from_texts(
+        gen = generate_sequences_from_texts(
             texts, indices_list, self, context_labels, batch_size)
 
         base_lr = 4e-3
