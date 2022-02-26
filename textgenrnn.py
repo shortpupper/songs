@@ -1,5 +1,4 @@
 import os
-from tempfile import NamedTemporaryFile
 from tensorflow.keras.callbacks import LearningRateScheduler, Callback
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.preprocessing import sequence
@@ -126,7 +125,7 @@ class textgenrnn:
                        via_new_model=False,
                        save_epochs=0,
                        multi_gpu=False,
-                       save_drive=None,
+                       save_drive=False,
                        **kwargs):
 
         if new_model and not via_new_model:
@@ -221,7 +220,7 @@ class textgenrnn:
                 weights_path = None
             else:
                 weights_path = "{}_weights.hdf5".format(self.config['name'])
-                self.save(weights_path)
+                self.save(weights_path, save_drive,)
 
 
             if multi_gpu:
@@ -342,7 +341,7 @@ class textgenrnn:
                             multi_gpu=multi_gpu,
                             **kwargs)
 
-    def save(self, weights_path="textgenrnn_weights_saved.hdf5"):
+    def save(self, weights_path="textgenrnn_weights_saved.hdf5", save_drive=False,):
         self.model.save_weights(weights_path)
         #edit
         with open("", "rb", encoding="utf-8", errors="ingore") as h:
@@ -379,7 +378,7 @@ class textgenrnn:
         else:
             self.train_on_texts(texts, context_labels=context_labels, **kwargs)
 #edit
-    def train_from_largetext_file(self, file_path, save_drive, new_model=True,  **kwargs):
+    def train_from_largetext_file(self, file_path, new_model=True, save_drive=False, **kwargs):
         with open(file_path, 'r', encoding='utf8', errors='ignore') as f:
             texts = [f.read()]
 
